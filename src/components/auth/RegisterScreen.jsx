@@ -7,6 +7,7 @@ import {
     setErrorAction,
     removeError
 } from '../../actions/ui';
+import { startRegisterWithEmailPasswordAndName } from '../../actions/auth';
 
 const RegisterScreen = () => {
     const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const RegisterScreen = () => {
         e.preventDefault();
         if (isFormValid()) {
             console.log('form correcto');
+            dispatch(startRegisterWithEmailPasswordAndName(email, password, name))
         }
     }
 

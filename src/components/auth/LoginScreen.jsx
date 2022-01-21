@@ -1,27 +1,45 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { startGoogleLogin, startLoginEmailPassword } from '../../actions/auth'
+import validator from 'validator';
+import { startGoogleLogin, startLoginWithEmailAndPassword } from '../../actions/auth'
+import { removeError, setErrorAction } from '../../actions/ui'
 import { useForm } from '../../hooks/useForm'
 
 
 const LoginScreen = () => {
-    const dispatch = useDispatch();
 
+    const dispatch = useDispatch();
+    const {loading} = useSelector(state => state.ui);
     const [formValues, handleInputChange] = useForm({
-        email: "ulisesCruz@gmail.com",
+        email: "cruz@gmail.com",
         password: 123456
     });
 
     const handleLogin = (e) => {
         e.preventDefault();
-        dispatch(startLoginEmailPassword(email, password));
+        if (isFormValid()) {
+            dispatch(startLoginWithEmailAndPassword(email, password));
+        }
 
     }
     const { email, password } = formValues;
 
-    const handleGoogleLogin = ()=>{
+    const handleGoogleLogin = () => {
         dispatch(startGoogleLogin());
+    }
+
+    const isFormValid = () => {
+        if (email.trim().length === 0) {
+            dispatch(setErrorAction("El correo no puede quedar vacio"));
+            return false;
+        } else if (!validator.isEmail(email)) {
+            dispatch(setErrorAction('El email es invalido'));
+            console.log('email is invalid');
+            return false;
+        }
+        dispatch(removeError());
+        return true;
     }
     return (
         <div>
@@ -45,7 +63,7 @@ const LoginScreen = () => {
                     value={password}
                     onChange={handleInputChange}
                 />
-                <button type="submit" className="btn btn-primary btn-block">
+                <button type="submit" className="btn btn-primary btn-block" disabled={loading} >
                     Login
                 </button>
                 <div className='auth__social-network'>
@@ -66,6 +84,16 @@ const LoginScreen = () => {
                     </Link>
                 </div>
             </form>
+            {/* {
+                ditto ?
+                ditto.map(
+                    (item, index) => {
+                        return <h1 key = {index}>{item.name}</h1>
+                    }
+                )
+                :
+                null
+            } */}
         </div>
     )
 }
