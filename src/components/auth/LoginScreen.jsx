@@ -35,7 +35,6 @@ const LoginScreen = () => {
             return false;
         } else if (!validator.isEmail(email)) {
             dispatch(setErrorAction('El email es invalido'));
-            console.log('email is invalid');
             return false;
         }
         dispatch(removeError());

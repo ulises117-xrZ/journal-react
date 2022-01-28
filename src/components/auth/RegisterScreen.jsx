@@ -24,24 +24,20 @@ const RegisterScreen = () => {
     const handleRegister = (e) => {
         e.preventDefault();
         if (isFormValid()) {
-            console.log('form correcto');
             dispatch(startRegisterWithEmailPasswordAndName(email, password, name))
         }
     }
 
     const isFormValid = () => {
         if (name.trim().length === 0) {
-            console.log('name is required');
 
             dispatch(setErrorAction('el usuario es invalido'));
             return false;
         } else if (!validator.isEmail(email)) {
             dispatch(setErrorAction('El email es invalido'));
-            console.log('email is invalid');
             return false;
         } else if (password !== password2 || password.length < 5 || password2.length < 5) {
             dispatch(setErrorAction('la contraseña es invalida'));
-            console.log('password error');
             return false;
         }
         dispatch(removeError());
