@@ -8,6 +8,7 @@ import { auth } from '../firebase/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+import {  startLoadingNotes } from '../actions/notes';
 const AppRouter = () => {
 
     const dispatch = useDispatch();
@@ -18,6 +19,8 @@ const AppRouter = () => {
         onAuthStateChanged(auth, (user) => {
             if (user?.uid) {
                 dispatch(login(user.uid, user.displayName));
+                dispatch(startLoadingNotes(user.uid));
+                // dispatch(setNotes(notes));
                 setIsLoggedIn(true);
             } else {
                 setIsLoggedIn(false);
