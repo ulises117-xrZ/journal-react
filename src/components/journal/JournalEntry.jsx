@@ -1,10 +1,15 @@
 import React from 'react'
 import moment from 'moment';
-const JournalEntry = ({id, date, title, body, url}) => {
+import { useDispatch } from 'react-redux';
+import { activeNote } from '../../actions/notes';
+const JournalEntry = ({ id, date, title, body, url }) => {
+    const dispatch = useDispatch();
     const noteDate = moment(date);
-
+    const handleActivateNote = (id, note) => {
+        dispatch(activeNote(id, note))
+    }
     return (
-        <div className="journal__entry pointer">
+        <div className="journal__entry pointer" onClick={() => { handleActivateNote(id, { date, title, url, body }) }}>
             <div
                 className="journal__entry-picture "
                 style={{
@@ -16,10 +21,13 @@ const JournalEntry = ({id, date, title, body, url}) => {
             </div>
             <div className="journal__entry-body">
                 <p className="journal__entry-title">
-                {title}
+                    {title}
                 </p>
                 <p className="journal__entry-content">
-                {body}
+                    
+                    {
+                        body.length > 10 && body.substring (0,65) + "..."
+                    }
                 </p>
             </div>
             <div className="journal__entry-date-box">
